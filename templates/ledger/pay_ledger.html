@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+  <div class="card shadow rounded-3">
+    <div class="card-header" style="background-color:#0f1c2e;color:#00d084;">
+      <h4 class="mb-0">Pay Ledger (Credit Payment)</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="customer" class="form-label">Select Customer</label>
+            <select name="customer" id="customer" class="form-select" required>
+              <option value="" selected disabled>-- Choose Customer --</option>
+              {% for customer in customers %}
+                <option value="{{ customer.id }}">{{ customer.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" name="date" id="date" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="credit" class="form-label">Credit Amount (Payment)</label>
+          <input type="number" step="0.01" name="credit" id="credit" class="form-control" placeholder="Enter credit/payment amount" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="details" class="form-label">Description</label>
+          <textarea name="details" id="details" rows="3" class="form-control" placeholder="Enter description..." required></textarea>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn" style="background-color:#198754;color:#fff;">Save Payment</button>
+          <a href="{% url 'ledger:list_ledger' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+  <!-- ✅ Top bar with both buttons -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Ledger Entries</h3>
+    <div>
+      <a href="{% url 'ledger:add_ledger' %}" class="btn" style="background-color:#198754;color:#fff;">
+        <i class="fa fa-plus"></i> Add New Ledger
+      </a>
+      <a href="{% url 'ledger:pay_ledger' %}" class="btn btn-warning">
+        💰 Pay Ledger
+      </a>
+    </div>
+  </div>
+
+  <div class="card shadow rounded-3">
+    <div class="card-body p-0">
+      <table class="table table-hover table-striped mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Details</th>
+            <th class="text-end">Debit</th>
+            <th class="text-end">Credit</th>
+            <th class="text-end">Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in ledger_entries_with_balance %}
+          <tr>
+            <td>{{ entry.ledger.customer.name }}</td>
+            <td>{{ entry.ledger.date|date:"Y-m-d" }}</td>
+            <td>{{ entry.ledger.description }}</td>  {# or details depending on your model #}
+            <td class="text-end">{{ entry.ledger.debit_amount|floatformat:2 }}</td>
+            <td class="text-end">{{ entry.ledger.credit_amount|floatformat:2 }}</td>
+            <td class="text-end fw-bold">{{ entry.balance|floatformat:2 }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="6" class="text-center py-3">No ledger entries found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

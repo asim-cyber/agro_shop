@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <!-- Left side: Product selection -->
+  <div class="col-md-7">
+    <h4>Products</h4>
+    <table class="table table-bordered" id="productTable">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Stock</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="cartBody"></tbody>
+    </table>
+    <button type="button" class="btn btn-success" onclick="addItem()">Add Item</button>
+  </div>
+
+  <!-- Right side: Invoice details -->
+  <div class="col-md-5">
+    <form method="POST">
+      {% csrf_token %}
+      <h4>Invoice Details</h4>
+
+      <!-- Billed to -->
+      <div class="mb-3">
+        <label>Customer</label>
+        <select name="customer" class="form-control">
+          {% for customer in customers %}
+          <option value="{{ customer.id }}">{{ customer.name }}</option>
+          {% endfor %}
+        </select>
+        <small class="text-muted">or enter "New Customer"</small>
+      </div>
+
+      <!-- Payment method -->
+      <div class="mb-3">
+        <label>Payment Method</label>
+        <select name="payment_method" class="form-control">
+          <option value="cash">Cash</option>
+          <option value="bank">Bank</option>
+        </select>
+      </div>
+
+      <!-- Totals -->
+      <div class="mb-3">
+        <label>Total Quantity</label>
+        <input type="text" id="totalQuantity" class="form-control" readonly>
+      </div>
+      <div class="mb-3">
+        <label>Grand Total</label>
+        <input type="text" id="grandTotal" class="form-control" readonly>
+      </div>
+
+      <!-- Ledger -->
+      <div class="mb-3">
+        <label>Customer Ledger</label>
+        <input type="text" class="form-control" readonly value="(auto calculated later)">
+      </div>
+
+      <!-- Receiving amount -->
+      <div class="mb-3">
+        <label>Receiving Amount</label>
+        <input type="number" name="receiving_amount" id="receivingAmount" class="form-control" oninput="calculateRemaining()">
+      </div>
+      <div class="mb-3">
+        <label>Remaining Amount</label>
+        <input type="text" id="remainingAmount" class="form-control" readonly>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Create Invoice</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function addItem() {
+  const row = `
+    <tr>
+      <td>
+        <select name="product_id" class="form-control">
+          {% for product in products %}
+          <option value="{{ product.id }}">{{ product.name }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td>Stock Here</td>
+      <td><input type="number" name="price" class="form-control" value="0" oninput="updateTotals()"></td>
+      <td><input type="number" name="quantity" class="form-control" value="1" oninput="updateTotals()"></td>
+      <td class="itemTotal">0</td>
+      <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+    </tr>`;
+  document.getElementById("cartBody").insertAdjacentHTML("beforeend", row);
+  updateTotals();
+}
+
+function removeRow(btn) {
+  btn.closest("tr").remove();
+  updateTotals();
+}
+
+function updateTotals() {
+  let totalQty = 0, grandTotal = 0;
+  document.querySelectorAll("#cartBody tr").forEach(row => {
+    let qty = parseInt(row.querySelector("input[name='quantity']").value) || 0;
+    let price = parseFloat(row.querySelector("input[name='price']").value) || 0;
+    let total = qty * price;
+    row.querySelector(".itemTotal").innerText = total.toFixed(2);
+    totalQty += qty;
+    grandTotal += total;
+  });
+  document.getElementById("totalQuantity").value = totalQty;
+  document.getElementById("grandTotal").value = grandTotal.toFixed(2);
+  calculateRemaining();
+}
+
+function calculateRemaining() {
+  let receiving = parseFloat(document.getElementById("receivingAmount").value) || 0;
+  let grandTotal = parseFloat(document.getElementById("grandTotal").value) || 0;
+  let remaining = grandTotal - receiving;
+  document.getElementById("remainingAmount").value = remaining.toFixed(2);
+}
+</script>
+{% endblock %}

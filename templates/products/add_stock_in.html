@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add Stock In</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Save</button>
+  <a href="{% url 'products:stock_in_list' product.id %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

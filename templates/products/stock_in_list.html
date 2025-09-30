@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Stock In List for {{ product.name }}</h2>
+
+<!-- ✅ Button to Add Stock In -->
+<a href="{% url 'products:add_stock_in' product.id %}" class="btn btn-primary mb-3">Add Stock In</a>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Quantity</th>
+      <th>Price per Item</th>
+      <th>Selling %</th>
+      <th>Total Amount</th>
+      <th>Buying Price per Item</th>
+      <th>Buying %</th>
+      <th>Total Buying Amount</th>
+      <th>Order Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stock in stockins %}
+    <tr>
+      <td>{{ stock.quantity }}</td>
+      <td>{{ stock.price_per_item }}</td>
+      <td>{{ stock.selling_percentage }}%</td>
+      <td>{{ stock.total_amount }}</td>
+      <td>{{ stock.buying_price_per_item }}</td>
+      <td>{{ stock.buying_percentage }}%</td>
+      <td>{{ stock.total_buying_amount }}</td>
+      <td>{{ stock.order_date }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="8">No stock records found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

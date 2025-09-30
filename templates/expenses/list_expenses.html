@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>Expenses List</h2>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Actions</th> <!-- ✅ New Column -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for expense in expenses %}
+      <tr>
+        <td>{{ expense.title }}</td>
+        <td>{{ expense.amount }}</td>
+        <td>{{ expense.description }}</td>
+        <td>{{ expense.date }}</td>
+        <td>
+          <a href="{% url 'expenses:update_expense' expense.id %}" class="btn btn-warning btn-sm">Update</a>
+          <a href="{% url 'expenses:delete_expense' expense.id %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5">No expenses found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

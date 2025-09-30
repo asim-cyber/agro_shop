@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Stock Out List for {{ product.name }}</h2>
+
+<a href="{% url 'products:add_stock_out' product.id %}" class="btn btn-danger mb-3">Add Stock Out</a>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Quantity</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for stockout in stockouts %}
+    <tr>
+      <td>{{ stockout.product.name }}</td>
+      <td>{{ stockout.product.category.name }}</td>
+      <td>{{ stockout.quantity }}</td>
+      <td>{{ stockout.date }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4">No stock out records found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{% url 'products:list_products' %}" class="btn btn-secondary">Back to Product List</a>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Monthly Logs</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary">Add Monthly Log</button>
+</form>
+<hr>
+<ul>
+  {% for log in logs %}
+    <li>{{ log.month }} - {{ log.summary }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

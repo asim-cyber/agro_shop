@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌱 Agro Shop</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body { display: flex; min-height: 100vh; margin: 0; }
+    .sidebar {
+      width: 260px;
+      background: #0f1c2e; /* dark modern look */
+      color: #fff;
+      padding: 15px;
+      transition: all 0.3s ease;
+    }
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #00d084;
+    }
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 15px;
+    }
+    .sidebar a i {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    .sidebar a:hover {
+      background: #198754;
+      padding-left: 18px;
+    }
+    .dropdown-toggle::after {
+      margin-left: auto;
+      transition: transform 0.3s ease;
+    }
+    .dropdown-toggle.collapsed::after {
+      transform: rotate(-90deg);
+    }
+    .collapse .dropdown-item {
+      padding-left: 35px;
+      font-size: 14px;
+      transition: padding 0.3s ease;
+    }
+    .collapse .dropdown-item:hover {
+      background-color: #198754;
+      padding-left: 40px;
+    }
+    .content { flex: 1; padding: 20px; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h3>🌱 Agro Shop</h3>
+    <hr>
+
+    <!-- Products -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#productsMenu" role="button">
+      <i class="fa fa-box"></i> Products
+    </a>
+    <div class="collapse" id="productsMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'products:add_category' %}">Add Category</a>
+      <a class="dropdown-item" href="{% url 'products:add_product' %}">Add Product</a>
+      <a class="dropdown-item" href="{% url 'products:list_products' %}">List Products</a>
+    </div>
+
+    <!-- Customers -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#customersMenu" role="button">
+      <i class="fa fa-users"></i> Customers
+    </a>
+    <div class="collapse" id="customersMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'customers:add_customer' %}">Add Customer</a>
+      <a class="dropdown-item" href="{% url 'customers:list_customers' %}">Customer List</a>
+    </div>
+
+    <!-- Banks -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#banksMenu" role="button">
+      <i class="fa fa-university"></i> Banks
+    </a>
+    <div class="collapse" id="banksMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'banks:add_bank' %}">Add Bank</a>
+      <a class="dropdown-item" href="{% url 'banks:list_banks' %}">Bank List</a>
+    </div>
+
+    <!-- Sales -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#salesMenu" role="button">
+      <i class="fa fa-file-invoice-dollar"></i> Sales
+    </a>
+    <div class="collapse" id="salesMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'sales:create_invoice' %}">Create Invoice</a>
+      <a class="dropdown-item" href="{% url 'sales:list_invoices' %}">Invoices List</a>
+    </div>
+
+    <!-- Expenses -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#expensesMenu" role="button">
+      <i class="fa fa-wallet"></i> Expenses
+    </a>
+    <div class="collapse" id="expensesMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'expenses:add_expense' %}">Add Expense</a>
+      <a class="dropdown-item" href="{% url 'expenses:list_expenses' %}">Expense List</a>
+    </div>
+
+    <!-- Logs -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#logsMenu" role="button">
+      <i class="fa fa-clipboard-list"></i> Logs & Reports
+    </a>
+    <div class="collapse" id="logsMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'logs_reports:daily_logs' %}">Daily Logs</a>
+      <a class="dropdown-item" href="{% url 'logs_reports:monthly_logs' %}">Monthly Logs</a>
+      <a class="dropdown-item" href="{% url 'logs_reports:monthly_report' %}">Monthly Reports</a>
+    </div>
+
+    <!-- Ledger -->
+    <a class="dropdown-toggle collapsed" data-bs-toggle="collapse" href="#ledgerMenu" role="button">
+      <i class="fa fa-book"></i> Ledger
+    </a>
+    <div class="collapse" id="ledgerMenu" data-bs-parent=".sidebar">
+      <a class="dropdown-item" href="{% url 'ledger:add_ledger' %}">Add Ledger Entry</a>
+      <a class="dropdown-item" href="{% url 'ledger:list_ledger' %}">Ledger List</a>
+    </div>
+
+    <hr>
+    <a href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i> Logout</a>
+    <a href="/admin/"><i class="fa fa-cog"></i> Admin Panel</a>
+  </div>
+
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

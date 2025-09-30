@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+  <div class="card shadow rounded-3">
+    <!-- Header: light background, heading text dark-navy -->
+    <div class="card-header bg-light">
+      <h4 class="mb-0 text-dark-navy">Add Ledger Entry</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="customer" class="form-label">Select Customer</label>
+            <select name="customer" id="customer" class="form-select" required>
+              <option value="" selected disabled>-- Choose Customer --</option>
+              {% for customer in customers %}
+                <option value="{{ customer.id }}">{{ customer.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" name="date" id="date" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="debit" class="form-label">Debit Amount</label>
+            <input type="number" step="0.01" name="debit" id="debit" class="form-control" placeholder="Enter debit amount" required>
+          </div>
+          <div class="col-md-6">
+            <label for="credit" class="form-label">Credit Amount (if any)</label>
+            <input type="number" step="0.01" name="credit" id="credit" class="form-control" placeholder="Enter credit amount">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="details" class="form-label">Details</label>
+          <textarea name="details" id="details" rows="3" class="form-control" placeholder="Enter details here..." required></textarea>
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-success px-4">Save Entry</button>
+          <a href="{% url 'ledger:list_ledger' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Daily Logs</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary">Add Daily Log</button>
+</form>
+<hr>
+<ul>
+  {% for log in logs %}
+    <li>{{ log.date }} - {{ log.description }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

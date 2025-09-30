@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Product List</h2>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Total Quantity</th>
+      <th>Available Quantity</th>
+      <th>Date Added</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" width="80" height="80">
+        {% else %}
+          No Image
+        {% endif %}
+      </td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.category.name }}</td>
+      <td>{{ product.price }}</td>
+      <td>{{ product.total_quantity }}</td>
+      <td>{{ product.available_quantity }}</td>
+      <td>{{ product.date_added }}</td>
+      <td>
+        <a href="{% url 'products:update_product' product.id %}" class="btn btn-warning btn-sm">Update</a>
+        
+        <!-- ✅ Stock In button opens Stock In List -->
+        <a href="{% url 'products:stock_in_list' product.id %}" class="btn btn-success btn-sm">Stock In</a>
+        
+        <!-- ✅ Stock Out button opens Stock Out List -->
+        <a href="{% url 'products:stock_out_list' product.id %}" class="btn btn-danger btn-sm">Stock Out</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

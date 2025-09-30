@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bank List</h2>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Account Number</th>
+      <th>Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for b in banks %}
+    <tr>
+      <td>{{ b.name }}</td>
+      <td>{{ b.account_number }}</td>
+      <td>{{ b.balance }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

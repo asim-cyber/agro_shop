@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Invoice List</h2>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Invoice #</th>
+      <th>Customer</th>
+      <th>Payment</th>
+      <th>Total Quantity</th>
+      <th>Grand Total</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for invoice in invoices %}
+    <tr>
+      <td>{{ invoice.date }}</td>
+      <td>{{ invoice.id }}</td>   <!-- or invoice.invoice_number if you have one -->
+      <td>{{ invoice.customer.name }}</td>
+      <td>{{ invoice.payment_method }}</td>
+      <td>{{ invoice.total_quantity }}</td>
+      <td>{{ invoice.grand_total }}</td>
+      <td>
+        <!-- ✅ Correct link -->
+        <a href="{% url 'sales:invoice_detail' invoice_id=invoice.pk %}" class="btn btn-info btn-sm">View</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="7">No invoices found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
