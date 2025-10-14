@@ -1,10 +1,85 @@
 {% extends "base.html" %}
-
 {% block content %}
-  <h2>Add Product</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Save</button>
-  </form>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card shadow border-0 rounded-4">
+        
+        <!-- Header -->
+        <div class="card-header text-center" style="background-color:#0f1c2e; color:#00d084;">
+          <h4 class="mb-0 fw-semibold">🛍️ Add New Product</h4>
+        </div>
+
+        <!-- Form Body -->
+        <div class="card-body p-4">
+          <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+
+            <!-- Django Form -->
+            <div class="mb-3">
+              {{ form.as_p }}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+             <a href="{% url 'products:list_products' %}" class="btn btn-secondary">
+
+                ← Back
+              </a>
+              <button type="submit" class="btn" style="background-color:#198754; color:#fff;">
+                💾 Save Product
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Custom Responsive Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  form label {
+    font-weight: 600;
+    color: #0f1c2e;
+  }
+
+  input, select, textarea {
+    border-radius: 8px !important;
+  }
+
+  /* Responsive for Mobile */
+  @media (max-width: 576px) {
+    .card-body {
+      padding: 1.2rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+    }
+
+    button, .btn {
+      font-size: 0.9rem;
+      width: 100%;
+      margin-top: 0.6rem;
+    }
+
+    .d-flex {
+      flex-direction: column-reverse;
+      gap: 0.8rem;
+    }
+  }
+</style>
 {% endblock %}

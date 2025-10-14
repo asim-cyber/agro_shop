@@ -1,9 +1,61 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Add Bank</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-success">Save</button>
-</form>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+          <h2 class="text-center mb-4 text-primary fw-bold">🏦 Add Bank</h2>
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+              {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-success w-100 py-2">💾 Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  form label {
+    font-weight: 600;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.5rem;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    h2 {
+      font-size: 1.25rem;
+    }
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.6rem;
+    }
+  }
+</style>
 {% endblock %}

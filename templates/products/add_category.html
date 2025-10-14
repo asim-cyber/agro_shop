@@ -1,9 +1,83 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Add Category</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-success">Save</button>
-</form>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card shadow border-0 rounded-4">
+        <!-- Card Header -->
+        <div class="card-header text-center" style="background-color:#0f1c2e; color:#00d084;">
+          <h4 class="mb-0 fw-semibold">➕ Add New Category</h4>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body p-4">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <!-- Form Fields -->
+            <div class="mb-3">
+              {{ form.as_p }}
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+              <!-- ✅ Fixed URL (was category:list_category before) -->
+            
+              <button type="submit" class="btn" style="background-color:#198754; color:#fff;">
+                💾 Save Category
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Responsive & Modern Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  form label {
+    font-weight: 600;
+    color: #0f1c2e;
+  }
+
+  input, select, textarea {
+    border-radius: 8px !important;
+    box-shadow: none !important;
+  }
+
+  /* ✅ Responsive Layout */
+  @media (max-width: 576px) {
+    .card-body {
+      padding: 1.2rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+    }
+
+    button, .btn {
+      font-size: 0.9rem;
+      width: 100%;
+      margin-top: 0.6rem;
+    }
+
+    .d-flex {
+      flex-direction: column-reverse;
+      gap: 0.8rem;
+    }
+  }
+</style>
 {% endblock %}

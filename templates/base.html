@@ -3,22 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <title>🌱 Agro Shop</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
   <style>
-    body { display: flex; min-height: 100vh; margin: 0; }
+    body {
+      display: flex;
+      flex-wrap: nowrap;
+      min-height: 100vh;
+      margin: 0;
+      background: #f8f9fa;
+    }
+
+    /* Sidebar */
     .sidebar {
       width: 260px;
-      background: #0f1c2e; /* dark modern look */
+      background: #0f1c2e;
       color: #fff;
       padding: 15px;
       transition: all 0.3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      z-index: 1000;
     }
+
     .sidebar h3 {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       color: #00d084;
+      font-weight: 600;
     }
+
     .sidebar a {
       color: #fff;
       text-decoration: none;
@@ -29,35 +50,98 @@
       transition: all 0.3s ease;
       font-size: 15px;
     }
+
     .sidebar a i {
       margin-right: 10px;
       font-size: 16px;
     }
+
     .sidebar a:hover {
       background: #198754;
       padding-left: 18px;
     }
+
     .dropdown-toggle::after {
       margin-left: auto;
       transition: transform 0.3s ease;
     }
+
     .dropdown-toggle.collapsed::after {
       transform: rotate(-90deg);
     }
+
     .collapse .dropdown-item {
       padding-left: 35px;
       font-size: 14px;
       transition: padding 0.3s ease;
     }
+
     .collapse .dropdown-item:hover {
       background-color: #198754;
       padding-left: 40px;
     }
-    .content { flex: 1; padding: 20px; }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 20px;
+      margin-left: 260px;
+      transition: margin-left 0.3s ease;
+    }
+
+    /* Sidebar Toggle for Mobile */
+    .toggle-btn {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 15px;
+      z-index: 1100;
+      background: #0f1c2e;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .content {
+        margin-left: 0;
+      }
+      .toggle-btn {
+        display: block;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .sidebar {
+        width: 220px;
+      }
+      .sidebar h3 {
+        font-size: 18px;
+      }
+      .sidebar a {
+        font-size: 14px;
+        padding: 8px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="sidebar">
+
+  <!-- Toggle Button -->
+  <button class="toggle-btn" id="toggleSidebar">
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
     <h3>🌱 Agro Shop</h3>
     <hr>
 
@@ -131,10 +215,21 @@
     <a href="/admin/"><i class="fa fa-cog"></i> Admin Panel</a>
   </div>
 
+  <!-- Content -->
   <div class="content">
     {% block content %}{% endblock %}
   </div>
 
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+  </script>
+
 </body>
 </html>

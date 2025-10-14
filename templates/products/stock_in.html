@@ -1,12 +1,83 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Stock In - {{ product.name }}</h2>
-<form method="post">
-  {% csrf_token %}
-  <div class="form-group">
-    <label for="quantity">Quantity to Add</label>
-    <input type="number" name="quantity" min="1" class="form-control" required>
+<div class="container my-5">
+  <div class="card shadow border-0 rounded-4">
+    <div class="card-header text-white" style="background-color:#0f1c2e;">
+      <h4 class="mb-0">📦 Stock In - {{ product.name }}</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <label for="quantity" class="form-label fw-bold">Quantity to Add</label>
+          <input 
+            type="number" 
+            name="quantity" 
+            id="quantity" 
+            min="1" 
+            class="form-control form-control-lg" 
+            placeholder="Enter quantity to add" 
+            required
+          >
+        </div>
+
+        <div class="text-end">
+          <button type="submit" class="btn btn-success px-4 me-2">✅ Add Stock</button>
+          <a href="{% url 'products:stock_in_list' product.id %}" class="btn btn-secondary px-4">Cancel</a>
+        </div>
+      </form>
+    </div>
   </div>
-  <button type="submit" class="btn btn-success">Add Stock</button>
-</form>
+</div>
+
+<!-- ✅ Responsive Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-control {
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+  }
+
+  .btn {
+    border-radius: 8px;
+  }
+
+  /* 📱 Mobile Responsive */
+  @media (max-width: 768px) {
+    .card {
+      margin: 0 10px;
+    }
+
+    .form-label {
+      font-size: 0.95rem;
+    }
+
+    .form-control {
+      font-size: 1rem;
+    }
+
+    .text-end {
+      text-align: center !important;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+  }
+</style>
 {% endblock %}

@@ -1,8 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container text-center mt-5">
-  <h1 class="display-4">🌱 Welcome to Agro Shop</h1>
-  <p class="lead">Use the navigation menu to manage products, customers, banks, sales, expenses, and reports.</p>
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center text-center py-5" style="min-height: 80vh;">
+  <h1 class="display-4 fw-bold text-success mb-3">🌱 Welcome to Agro Shop</h1>
+  <p class="lead text-secondary px-3">
+    Manage your <strong>Products</strong>, <strong>Customers</strong>, <strong>Banks</strong>, <strong>Sales</strong>,
+    <strong>Expenses</strong>, and <strong>Reports</strong> easily using the sidebar navigation.
+  </p>
+
+  <div class="mt-4">
+    <a href="{% url 'products:list_products' %}" class="btn btn-success btn-lg mx-2 mb-2">
+      <i class="fa fa-box"></i> View Products
+    </a>
+    <a href="{% url 'sales:list_invoices' %}" class="btn btn-outline-success btn-lg mx-2 mb-2">
+      <i class="fa fa-file-invoice-dollar"></i> View Invoices
+    </a>
+  </div>
 </div>
+
+<!-- Optional Custom Styling -->
+<style>
+  @media (max-width: 768px) {
+    h1.display-4 {
+      font-size: 2rem;
+    }
+    p.lead {
+      font-size: 1rem;
+    }
+    .btn-lg {
+      font-size: 0.9rem;
+      padding: 10px 18px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .container-fluid {
+      padding: 20px;
+    }
+    h1.display-4 {
+      font-size: 1.8rem;
+    }
+    p.lead {
+      font-size: 0.95rem;
+    }
+  }
+</style>
 {% endblock %}

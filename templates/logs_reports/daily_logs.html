@@ -1,15 +1,124 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Daily Logs</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn btn-primary">Add Daily Log</button>
-</form>
-<hr>
-<ul>
-  {% for log in logs %}
-    <li>{{ log.date }} - {{ log.description }}</li>
-  {% endfor %}
-</ul>
+<div class="container my-5">
+  <div class="card shadow-lg border-0 rounded-4">
+    <!-- Header -->
+    <div class="card-header text-center py-3" style="background-color:#0f1c2e; color:#00d084;">
+      <h4 class="mb-0 fw-bold">🗓️ Daily Logs</h4>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body p-4">
+      <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-md-6">
+            <label for="date" class="form-label fw-semibold">Date</label>
+            {{ form.date }}
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="description" class="form-label fw-semibold">Description</label>
+            {{ form.description }}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success w-100 mt-2 py-2 shadow-sm">➕ Add Daily Log</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <hr class="my-5">
+
+  <!-- Log List -->
+  <div class="card border-0 shadow-lg rounded-4">
+    <div class="card-header bg-light py-3">
+      <h5 class="mb-0 text-dark-navy fw-bold">📋 Log Entries</h5>
+    </div>
+    <div class="card-body">
+      {% if logs %}
+        <ul class="list-group list-group-flush">
+          {% for log in logs %}
+          <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+            <span class="fw-semibold text-dark">{{ log.date }}</span>
+            <span class="text-muted small mt-1 mt-md-0">{{ log.description }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-center text-muted my-3">No daily logs added yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Custom Responsive Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+  }
+
+  .form-label {
+    color: #0f1c2e;
+  }
+
+  .form-control, select, textarea {
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus, select:focus, textarea:focus {
+    border-color: #00d084;
+    box-shadow: 0 0 0 0.2rem rgba(0, 208, 132, 0.25);
+  }
+
+  .btn {
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* 📱 Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 1rem;
+    }
+
+    h4 {
+      font-size: 1.3rem;
+    }
+
+    .list-group-item {
+      flex-direction: column;
+      align-items: flex-start !important;
+      text-align: left;
+    }
+
+    .list-group-item span.text-muted {
+      margin-top: 0.3rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .form-label {
+      font-size: 0.9rem;
+    }
+
+    .btn {
+      font-size: 0.9rem;
+    }
+  }
+</style>
 {% endblock %}

@@ -1,33 +1,104 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Stock Out List for {{ product.name }}</h2>
+<div class="container my-5">
 
-<a href="{% url 'products:add_stock_out' product.id %}" class="btn btn-danger mb-3">Add Stock Out</a>
+  <!-- ✅ Header Section -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <h3 class="mb-3 mb-md-0 fw-bold text-dark-navy">📉 Stock Out List for {{ product.name }}</h3>
+    <div>
+      <a href="{% url 'products:add_stock_out' product.id %}" class="btn btn-danger me-2">
+        ➕ Add Stock Out
+      </a>
+      <a href="{% url 'products:list_products' %}" class="btn btn-secondary">
+        ← Back to Product List
+      </a>
+    </div>
+  </div>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Product</th>
-      <th>Category</th>
-      <th>Quantity</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for stockout in stockouts %}
-    <tr>
-      <td>{{ stockout.product.name }}</td>
-      <td>{{ stockout.product.category.name }}</td>
-      <td>{{ stockout.quantity }}</td>
-      <td>{{ stockout.date }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="4">No stock out records found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <!-- ✅ Responsive Table -->
+  <div class="card shadow-sm rounded-4 border-0">
+    <div class="card-header text-white" style="background-color:#0f1c2e;">
+      <h5 class="mb-0">Stock Out Records</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0 align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stockout in stockouts %}
+            <tr>
+              <td>{{ stockout.product.name }}</td>
+              <td>{{ stockout.product.category.name }}</td>
+              <td>{{ stockout.quantity }}</td>
+              <td>{{ stockout.date|date:"Y-m-d" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center py-3">No stock out records found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
-<a href="{% url 'products:list_products' %}" class="btn btn-secondary">Back to Product List</a>
+<!-- ✅ Custom Responsive Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .text-dark-navy {
+    color: #0f1c2e;
+  }
+
+  .card {
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn {
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  /* 📱 Mobile Responsive Adjustments */
+  @media (max-width: 768px) {
+    .d-flex {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+
+    .d-flex a {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .table {
+      font-size: 0.9rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+    }
+  }
+</style>
 {% endblock %}

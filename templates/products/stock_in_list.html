@@ -1,40 +1,112 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Stock In List for {{ product.name }}</h2>
+<div class="container my-5">
+  <!-- Header and Add Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h2 class="fw-bold text-dark-navy mb-3">📦 Stock In List for {{ product.name }}</h2>
+    <a href="{% url 'products:add_stock_in' product.id %}" class="btn btn-success">
+      ➕ Add Stock In
+    </a>
+  </div>
 
-<!-- ✅ Button to Add Stock In -->
-<a href="{% url 'products:add_stock_in' product.id %}" class="btn btn-primary mb-3">Add Stock In</a>
+  <!-- Stock Table -->
+  <div class="card shadow border-0 rounded-4">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Quantity</th>
+              <th>Price per Item</th>
+              <th>Selling %</th>
+              <th>Total Amount</th>
+              <th>Buying Price per Item</th>
+              <th>Buying %</th>
+              <th>Total Buying Amount</th>
+              <th>Order Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stock in stockins %}
+            <tr>
+              <td data-label="Quantity">{{ stock.quantity }}</td>
+              <td data-label="Price per Item">Rs. {{ stock.price_per_item|floatformat:2 }}</td>
+              <td data-label="Selling %">{{ stock.selling_percentage }}%</td>
+              <td data-label="Total Amount">Rs. {{ stock.total_amount|floatformat:2 }}</td>
+              <td data-label="Buying Price per Item">Rs. {{ stock.buying_price_per_item|floatformat:2 }}</td>
+              <td data-label="Buying %">{{ stock.buying_percentage }}%</td>
+              <td data-label="Total Buying Amount">Rs. {{ stock.total_buying_amount|floatformat:2 }}</td>
+              <td data-label="Order Date">{{ stock.order_date|date:"Y-m-d" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center py-4 text-muted">No stock records found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Quantity</th>
-      <th>Price per Item</th>
-      <th>Selling %</th>
-      <th>Total Amount</th>
-      <th>Buying Price per Item</th>
-      <th>Buying %</th>
-      <th>Total Buying Amount</th>
-      <th>Order Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for stock in stockins %}
-    <tr>
-      <td>{{ stock.quantity }}</td>
-      <td>{{ stock.price_per_item }}</td>
-      <td>{{ stock.selling_percentage }}%</td>
-      <td>{{ stock.total_amount }}</td>
-      <td>{{ stock.buying_price_per_item }}</td>
-      <td>{{ stock.buying_percentage }}%</td>
-      <td>{{ stock.total_buying_amount }}</td>
-      <td>{{ stock.order_date }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="8">No stock records found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<!-- ✅ Custom Styling for Responsiveness -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .text-dark-navy {
+    color: #0f1c2e !important;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+  }
+
+  table th, table td {
+    vertical-align: middle !important;
+    text-align: center;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    .table thead {
+      display: none;
+    }
+
+    .table tbody tr {
+      display: block;
+      margin-bottom: 1rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+    }
+
+    .table tbody td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: right;
+      padding: 0.6rem;
+      border: none;
+    }
+
+    .table tbody td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      text-align: left;
+      color: #0f1c2e;
+    }
+  }
+</style>
 {% endblock %}

@@ -1,11 +1,117 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-  <h2>Update Expense</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Update</button>
-  </form>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-11">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white text-center rounded-top-4">
+          <h3 class="mb-0 fw-semibold">✏️ Update Expense</h3>
+        </div>
+        <div class="card-body p-4">
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg mt-3">
+                💾 Update Expense
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-outline-secondary">
+          ← Back to List
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ✅ Responsive and Clean Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  label {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .form-control {
+    border-radius: 8px;
+    box-shadow: none;
+    border: 1px solid #ced4da;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+  }
+
+  .btn-success {
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-success:hover {
+    background-color: #157347;
+    transform: scale(1.02);
+  }
+
+  .btn-outline-secondary {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+  }
+
+  /* 📱 Responsive Tweaks */
+  @media (max-width: 768px) {
+    .card {
+      padding: 1rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+    }
+
+    .btn-lg {
+      font-size: 1rem;
+      padding: 0.6rem 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .container {
+      padding: 1rem;
+    }
+
+    .card-body {
+      padding: 1.2rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+    }
+  }
+</style>
 {% endblock %}

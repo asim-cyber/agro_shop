@@ -1,11 +1,81 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-  <h2>Add Expense</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save Expense</button>
-  </form>
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+    <div class="card-body p-4">
+      <h2 class="text-center text-primary fw-bold mb-4">💰 Add Expense</h2>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.as_p }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2">Save Expense</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-outline-secondary w-100">
+          🔙 Back to Expense List
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Custom Styles -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  form label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  input, select, textarea {
+    border-radius: 8px !important;
+  }
+
+  button {
+    transition: 0.3s ease;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 1.5rem;
+    }
+    .card {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    h2 {
+      font-size: 1.3rem;
+    }
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.6rem;
+    }
+  }
+</style>
 {% endblock %}

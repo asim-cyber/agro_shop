@@ -1,50 +1,141 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-4">
-  <!-- ✅ Top bar with both buttons -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="mb-0">Ledger Entries</h3>
-    <div>
-      <a href="{% url 'ledger:add_ledger' %}" class="btn" style="background-color:#198754;color:#fff;">
+<div class="container my-5">
+  <!-- ✅ Header Bar -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+    <h3 class="fw-bold text-dark mb-0">📒 Ledger Entries</h3>
+    <div class="d-flex flex-wrap gap-2">
+      <a href="{% url 'ledger:add_ledger' %}" class="btn btn-success px-3 shadow-sm">
         <i class="fa fa-plus"></i> Add New Ledger
       </a>
-      <a href="{% url 'ledger:pay_ledger' %}" class="btn btn-warning">
+      <a href="{% url 'ledger:pay_ledger' %}" class="btn btn-warning px-3 shadow-sm">
         💰 Pay Ledger
       </a>
     </div>
   </div>
 
-  <div class="card shadow rounded-3">
+  <!-- ✅ Ledger Table Card -->
+  <div class="card border-0 shadow-lg rounded-4">
     <div class="card-body p-0">
-      <table class="table table-hover table-striped mb-0">
-        <thead class="table-dark">
-          <tr>
-            <th>Customer</th>
-            <th>Date</th>
-            <th>Details</th>
-            <th class="text-end">Debit</th>
-            <th class="text-end">Credit</th>
-            <th class="text-end">Balance</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for entry in ledger_entries_with_balance %}
-          <tr>
-            <td>{{ entry.ledger.customer.name }}</td>
-            <td>{{ entry.ledger.date|date:"Y-m-d" }}</td>
-            <td>{{ entry.ledger.description }}</td>  {# or details depending on your model #}
-            <td class="text-end">{{ entry.ledger.debit_amount|floatformat:2 }}</td>
-            <td class="text-end">{{ entry.ledger.credit_amount|floatformat:2 }}</td>
-            <td class="text-end fw-bold">{{ entry.balance|floatformat:2 }}</td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="6" class="text-center py-3">No ledger entries found.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="table-dark text-center sticky-top">
+            <tr>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Details</th>
+              <th class="text-end">Debit</th>
+              <th class="text-end">Credit</th>
+              <th class="text-end">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in ledger_entries_with_balance %}
+            <tr>
+              <td>{{ entry.ledger.customer.name }}</td>
+              <td>{{ entry.ledger.date|date:"Y-m-d" }}</td>
+              <td>{{ entry.ledger.description }}</td>
+              <td class="text-end text-danger">{{ entry.ledger.debit_amount|floatformat:2 }}</td>
+              <td class="text-end text-success">{{ entry.ledger.credit_amount|floatformat:2 }}</td>
+              <td class="text-end fw-bold text-primary">{{ entry.balance|floatformat:2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center py-4 text-muted">
+                No ledger entries found.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- ✅ Custom Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  h3 {
+    font-family: "Poppins", sans-serif;
+  }
+
+  .card {
+    border-radius: 1rem;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  .table thead th {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .table td,
+  .table th {
+    vertical-align: middle;
+    padding: 0.9rem;
+  }
+
+  .btn {
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* 📱 Responsive Design */
+  @media (max-width: 768px) {
+    .btn {
+      width: 100%;
+    }
+
+    .d-flex.flex-md-row {
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .card {
+      border-radius: 0.75rem;
+    }
+
+    .table-responsive {
+      font-size: 0.9rem;
+    }
+
+    .btn + .btn {
+      margin-top: 0.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .table {
+      font-size: 0.85rem;
+    }
+
+    th,
+    td {
+      padding: 0.6rem;
+    }
+
+    .text-end {
+      text-align: right !important;
+    }
+  }
+</style>
 {% endblock %}

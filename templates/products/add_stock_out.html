@@ -1,18 +1,97 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-4">
-  <h2>Stock Out - {{ product.name }}</h2>
-  
-  <div class="card p-4 shadow">
-    <p><strong>Current Available Quantity:</strong> {{ product.available_quantity }}</p>
-    
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      
-      <button type="submit" class="btn btn-danger">Save</button>
-      <a href="{% url 'products:stock_out_list' product.id %}" class="btn btn-secondary">Cancel</a>
-    </form>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+
+      <!-- Card -->
+      <div class="card shadow border-0 rounded-4">
+
+        <!-- Header -->
+        <div class="card-header text-center" style="background-color:#0f1c2e; color:#00d084;">
+          <h4 class="mb-0 fw-semibold">📤 Stock Out - {{ product.name }}</h4>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4">
+          <p class="text-dark fw-semibold mb-3">
+            🧾 <strong>Current Available Quantity:</strong>
+            <span class="text-success">{{ product.available_quantity }}</span>
+          </p>
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <!-- Form Fields -->
+            <div class="mb-3">
+              {{ form.as_p }}
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <a href="{% url 'products:stock_out_list' product.id %}" class="btn btn-secondary">
+                ← Cancel
+              </a>
+              <button type="submit" class="btn btn-danger">
+                💾 Save
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- ✅ Custom Responsive Styling -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+  }
+
+  form label {
+    font-weight: 600;
+    color: #0f1c2e;
+  }
+
+  input, select, textarea {
+    border-radius: 8px !important;
+  }
+
+  /* Responsive for Small Screens */
+  @media (max-width: 576px) {
+    .card-body {
+      padding: 1.2rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+    }
+
+    button, .btn {
+      font-size: 0.9rem;
+      width: 100%;
+      margin-top: 0.6rem;
+    }
+
+    .d-flex {
+      flex-direction: column-reverse;
+      gap: 0.8rem;
+    }
+
+    p strong {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+  }
+</style>
 {% endblock %}

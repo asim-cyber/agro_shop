@@ -1,58 +1,160 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container my-4">
-  <div class="card shadow">
-    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">Invoice #{{ invoice.id }}</h4>
-      <div>
+  <div class="card shadow-lg border-0 rounded-4">
+    <!-- Header -->
+    <div class="card-header bg-dark text-white d-flex flex-wrap justify-content-between align-items-center py-3">
+      <h4 class="mb-2 mb-md-0">🧾 Invoice #{{ invoice.id }}</h4>
+      <div class="d-flex gap-2 flex-wrap">
         <!-- Print Invoice Button -->
         <a href="{% url 'sales:print_invoice' invoice.id %}" 
-           class="btn btn-warning btn-sm" target="_blank">
-          <i class="fa fa-print"></i> Print Invoice
+           class="btn btn-warning btn-sm fw-semibold shadow-sm" target="_blank">
+          <i class="fa fa-print"></i> Print
         </a>
         <!-- Back to List Button -->
-        <a href="{% url 'sales:list_invoices' %}" class="btn btn-secondary btn-sm">
-          <i class="fa fa-arrow-left"></i> Back to List
+        <a href="{% url 'sales:list_invoices' %}" class="btn btn-secondary btn-sm fw-semibold shadow-sm">
+          <i class="fa fa-arrow-left"></i> Back
         </a>
       </div>
     </div>
 
-    <div class="card-body">
-      <!-- Invoice Main Details -->
-      <p><strong>Date:</strong> {{ invoice.date }}</p>
-      <p><strong>Customer:</strong> {{ invoice.customer.name }}</p>
-      <p><strong>Payment Method:</strong> {{ invoice.payment_method }}</p>
-      <p><strong>Total Quantity:</strong> {{ invoice.total_quantity }}</p>
-      <p><strong>Grand Total:</strong> {{ invoice.grand_total }}</p>
+    <!-- Body -->
+    <div class="card-body bg-light">
+      <!-- Invoice Info -->
+      <div class="row gy-3">
+        <div class="col-md-6 col-12">
+          <p><strong>Date:</strong> {{ invoice.date }}</p>
+          <p><strong>Customer:</strong> {{ invoice.customer.name }}</p>
+          <p><strong>Payment Method:</strong> {{ invoice.payment_method|title }}</p>
+        </div>
+        <div class="col-md-6 col-12">
+          <p><strong>Total Quantity:</strong> {{ invoice.total_quantity }}</p>
+          <p><strong>Grand Total:</strong> {{ invoice.grand_total }}</p>
+          {% if invoice.receiving_amount %}
+          <p><strong>Received:</strong> {{ invoice.receiving_amount }}</p>
+          <p><strong>Remaining:</strong> {{ invoice.remaining_amount }}</p>
+          {% endif %}
+        </div>
+      </div>
 
       <hr>
 
       <!-- Items Table -->
-      <table class="table table-striped table-hover">
-        <thead class="table-dark">
-          <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in invoice.items.all %}
-          <tr>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.price }}</td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="3" class="text-center py-3">No items found for this invoice.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-responsive mt-3">
+        <table class="table table-bordered table-striped align-middle text-center shadow-sm">
+          <thead class="table-dark">
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in invoice.items.all %}
+            <tr>
+              <td>{{ item.product.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price }}</td>
+              <td>{{ item.quantity|floatformat:2|add:item.price|floatformat:2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center py-3">No items found for this invoice.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-      <h5 class="text-end fw-bold mt-3">Total: {{ invoice.total_amount }}</h5>
+      <!-- Footer Total -->
+      <div class="text-end mt-4">
+        <h5 class="fw-bold">💰 Total: {{ invoice.total_amount }}</h5>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- ✅ Responsive Styling -->
+<style>
+  body {
+    background-color: #f5f6fa;
+  }
+
+  .card {
+    overflow: hidden;
+  }
+
+  h4, h5 {
+    font-weight: 600;
+  }
+
+  .table th {
+    font-size: 0.9rem;
+  }
+
+  .table td {
+    font-size: 0.85rem;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .card-header {
+      text-align: center;
+    }
+
+    .card-header h4 {
+      width: 100%;
+      text-align: center;
+    }
+
+    .card-header .btn {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .table {
+      font-size: 0.8rem;
+    }
+
+    .btn {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.6rem;
+    }
+
+    p {
+      margin-bottom: 0.4rem;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+    }
+
+    h5 {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .card {
+      border-radius: 0;
+    }
+
+    .table th, .table td {
+      font-size: 0.75rem;
+      padding: 6px;
+      white-space: nowrap;
+    }
+
+    .card-header {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
 {% endblock %}
