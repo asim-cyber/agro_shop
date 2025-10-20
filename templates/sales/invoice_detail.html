@@ -56,7 +56,7 @@
               <td>{{ item.product.name }}</td>
               <td>{{ item.quantity }}</td>
               <td>{{ item.price }}</td>
-              <td>{{ item.quantity|floatformat:2|add:item.price|floatformat:2 }}</td>
+              <td>{{ item.total|floatformat:2 }}</td>
             </tr>
             {% empty %}
             <tr>
@@ -69,7 +69,7 @@
 
       <!-- Footer Total -->
       <div class="text-end mt-4">
-        <h5 class="fw-bold">💰 Total: {{ invoice.total_amount }}</h5>
+          <h5 class="fw-bold">💰 Total: {{ invoice.grand_total|floatformat:2 }}</h5>
       </div>
     </div>
   </div>
