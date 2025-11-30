@@ -6,13 +6,12 @@
     <div class="card-header bg-dark text-white d-flex flex-wrap justify-content-between align-items-center py-3">
       <h4 class="mb-2 mb-md-0">🧾 Invoice #{{ invoice.id }}</h4>
       <div class="d-flex gap-2 flex-wrap">
-        <!-- Print Invoice Button -->
         <a href="{% url 'sales:print_invoice' invoice.id %}" 
            class="btn btn-warning btn-sm fw-semibold shadow-sm" target="_blank">
           <i class="fa fa-print"></i> Print
         </a>
-        <!-- Back to List Button -->
-        <a href="{% url 'sales:list_invoices' %}" class="btn btn-secondary btn-sm fw-semibold shadow-sm">
+        <a href="{% url 'sales:list_invoices' %}" 
+           class="btn btn-secondary btn-sm fw-semibold shadow-sm">
           <i class="fa fa-arrow-left"></i> Back
         </a>
       </div>
@@ -20,42 +19,41 @@
 
     <!-- Body -->
     <div class="card-body bg-light">
-      <!-- Invoice Info -->
       <div class="row gy-3">
         <div class="col-md-6 col-12">
-          <p><strong>Date:</strong> {{ invoice.date }}</p>
+          <p><strong>Date:</strong> {{ invoice.date|date:"Y-m-d" }}</p>
           <p><strong>Customer:</strong> {{ invoice.customer.name }}</p>
           <p><strong>Payment Method:</strong> {{ invoice.payment_method|title }}</p>
         </div>
         <div class="col-md-6 col-12">
           <p><strong>Total Quantity:</strong> {{ invoice.total_quantity }}</p>
-          <p><strong>Grand Total:</strong> {{ invoice.grand_total }}</p>
+          <p><strong>Grand Total:</strong> {{ invoice.grand_total|floatformat:2 }}</p>
           {% if invoice.receiving_amount %}
-          <p><strong>Received:</strong> {{ invoice.receiving_amount }}</p>
-          <p><strong>Remaining:</strong> {{ invoice.remaining_amount }}</p>
+          <p><strong>Received:</strong> {{ invoice.receiving_amount|floatformat:2 }}</p>
+          <p><strong>Remaining:</strong> {{ invoice.remaining_amount|floatformat:2 }}</p>
           {% endif %}
         </div>
       </div>
 
       <hr>
 
-      <!-- Items Table -->
+      <!-- Items -->
       <div class="table-responsive mt-3">
         <table class="table table-bordered table-striped align-middle text-center shadow-sm">
           <thead class="table-dark">
             <tr>
               <th>Product</th>
               <th>Quantity</th>
-              <th>Price</th>
-              <th>Total</th>
+              <th>Price (₨)</th>
+              <th>Total (₨)</th>
             </tr>
           </thead>
           <tbody>
-            {% for item in invoice.items.all %}
+            {% for item in invoice.invoiceitem_set.all %}
             <tr>
               <td>{{ item.product.name }}</td>
               <td>{{ item.quantity }}</td>
-              <td>{{ item.price }}</td>
+              <td>{{ item.price|floatformat:2 }}</td>
               <td>{{ item.total|floatformat:2 }}</td>
             </tr>
             {% empty %}
@@ -67,94 +65,43 @@
         </table>
       </div>
 
-      <!-- Footer Total -->
       <div class="text-end mt-4">
-          <h5 class="fw-bold">💰 Total: {{ invoice.grand_total|floatformat:2 }}</h5>
+        <h5 class="fw-bold">💰 Total: {{ invoice.grand_total|floatformat:2 }}</h5>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ✅ Responsive Styling -->
 <style>
-  body {
-    background-color: #f5f6fa;
-  }
+  body { background-color: #f5f6fa; }
+  .card { overflow: hidden; }
+  h4, h5 { font-weight: 600; }
+  .table th { font-size: 0.9rem; }
+  .table td { font-size: 0.85rem; }
 
-  .card {
-    overflow: hidden;
-  }
-
-  h4, h5 {
-    font-weight: 600;
-  }
-
-  .table th {
-    font-size: 0.9rem;
-  }
-
-  .table td {
-    font-size: 0.85rem;
-  }
-
-  /* Responsive Adjustments */
   @media (max-width: 992px) {
-    .card-header {
-      text-align: center;
-    }
-
-    .card-header h4 {
-      width: 100%;
-      text-align: center;
-    }
-
-    .card-header .btn {
-      font-size: 0.85rem;
-    }
+    .card-header { text-align: center; }
+    .card-header h4 { width: 100%; text-align: center; }
+    .card-header .btn { font-size: 0.85rem; }
   }
 
   @media (max-width: 768px) {
-    .table {
-      font-size: 0.8rem;
-    }
-
-    .btn {
-      font-size: 0.8rem;
-      padding: 0.35rem 0.6rem;
-    }
-
-    p {
-      margin-bottom: 0.4rem;
-    }
-
-    h4 {
-      font-size: 1.1rem;
-    }
-
-    h5 {
-      font-size: 1rem;
-    }
+    .table { font-size: 0.8rem; }
+    .btn { font-size: 0.8rem; padding: 0.35rem 0.6rem; }
+    p { margin-bottom: 0.4rem; }
+    h4 { font-size: 1.1rem; }
+    h5 { font-size: 1rem; }
   }
 
   @media (max-width: 576px) {
-    .card {
-      border-radius: 0;
-    }
-
+    .card { border-radius: 0; }
     .table th, .table td {
       font-size: 0.75rem;
       padding: 6px;
       white-space: nowrap;
     }
-
-    .card-header {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .btn {
-      width: 100%;
-    }
+    .card-header { flex-direction: column; gap: 0.5rem; }
+    .btn { width: 100%; }
   }
 </style>
 {% endblock %}

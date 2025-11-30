@@ -1,28 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-6 col-md-8 col-sm-11">
-      <div class="card shadow-lg border-0 rounded-4">
-        <div class="card-header bg-primary text-white text-center rounded-top-4">
-          <h3 class="mb-0 fw-semibold">✏️ Update Expense</h3>
-        </div>
-        <div class="card-body p-4">
-          <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
+  <div class="card border rounded-3 mx-auto" style="max-width: 500px; background-color: #ffffff;">
+    <div class="card-body p-4">
+      <h3 class="text-center fw-bold mb-4" style="color: #333;">✏️ Update Expense</h3>
 
-            <div class="d-grid">
-              <button type="submit" class="btn btn-success btn-lg mt-3">
-                💾 Update Expense
-              </button>
-            </div>
-          </form>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.as_p }}
         </div>
-      </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2">💾 Update Expense</button>
+      </form>
 
       <div class="text-center mt-3">
-        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-outline-secondary">
+        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-outline-secondary w-100">
           ← Back to List
         </a>
       </div>
@@ -30,87 +23,64 @@
   </div>
 </div>
 
-<!-- ✅ Responsive and Clean Styling -->
+<!-- ✅ Clean & Flat Styles -->
 <style>
   body {
-    background-color: #f8f9fa;
+    background-color: #eef1f5;
   }
 
   .card {
-    transition: all 0.3s ease-in-out;
+    box-shadow: none !important;
+    border: 1px solid #dee2e6 !important;
   }
 
-  .card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
   }
 
-  label {
-    font-weight: 500;
+  form label {
+    font-weight: 600;
     color: #333;
   }
 
-  .form-control {
-    border-radius: 8px;
-    box-shadow: none;
-    border: 1px solid #ced4da;
-    transition: all 0.2s ease;
+  input,
+  select,
+  textarea {
+    border-radius: 6px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
   }
 
-  .form-control:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #0d6efd !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2) !important;
   }
 
-  .btn-success {
-    border-radius: 10px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    transition: all 0.3s ease;
+  .btn-primary {
+    background-color: #2f78c4 !important;
+    border: none !important;
   }
 
-  .btn-success:hover {
-    background-color: #157347;
-    transform: scale(1.02);
+  .btn-primary:hover {
+    background-color: #2566a8 !important;
   }
 
   .btn-outline-secondary {
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    border-color: #ccc !important;
+    color: #333 !important;
   }
 
   .btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: #fff;
-  }
-
-  /* 📱 Responsive Tweaks */
-  @media (max-width: 768px) {
-    .card {
-      padding: 1rem;
-    }
-
-    h3 {
-      font-size: 1.4rem;
-    }
-
-    .btn-lg {
-      font-size: 1rem;
-      padding: 0.6rem 1rem;
-    }
+    background-color: #e9ecef !important;
   }
 
   @media (max-width: 576px) {
-    .container {
-      padding: 1rem;
-    }
-
     .card-body {
-      padding: 1.2rem;
-    }
-
-    h3 {
-      font-size: 1.3rem;
+      padding: 1.5rem !important;
     }
   }
 </style>

@@ -1,85 +1,86 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
-      <div class="card shadow border-0 rounded-4">
-        
-        <!-- Header -->
-        <div class="card-header text-center" style="background-color:#0f1c2e; color:#00d084;">
-          <h4 class="mb-0 fw-semibold">🛍️ Add New Product</h4>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="card w-50 shadow-sm" style="border: 2px solid #dee2e6;">
+    
+    <div class="card-header text-center fw-semibold fs-5" style="background-color: #f8f9fa;">
+      Add Product
+    </div>
+
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Name -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Name <span class="text-danger">*</span></label>
+          {{ form.name }}
         </div>
 
-        <!-- Form Body -->
-        <div class="card-body p-4">
-          <form method="post" enctype="multipart/form-data" novalidate>
-            {% csrf_token %}
-
-            <!-- Django Form -->
-            <div class="mb-3">
-              {{ form.as_p }}
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
-             <a href="{% url 'products:list_products' %}" class="btn btn-secondary">
-
-                ← Back
-              </a>
-              <button type="submit" class="btn" style="background-color:#198754; color:#fff;">
-                💾 Save Product
-              </button>
-            </div>
-          </form>
+        <!-- Category -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+          {{ form.category }}
         </div>
-      </div>
+
+        <!-- Image -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Product Image</label>
+          {{ form.image }}
+          <small class="text-muted d-block mt-1">You can upload from your computer</small>
+        </div>
+
+        <!-- Date -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Date <span class="text-danger">*</span></label>
+          {{ form.added_date }}
+        </div>
+
+        <!-- Save Button -->
+        <div class="text-end mt-4">
+          <button type="submit" class="btn btn-primary px-4">Save</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
-<!-- ✅ Custom Responsive Styling -->
 <style>
   body {
     background-color: #f8f9fa;
+    font-family: "Poppins", sans-serif;
   }
 
   .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 500px;
+    border-radius: 6px;
   }
 
-  .card:hover {
-    transform: scale(1.02);
+  input, select {
+    border: 2px solid #ced4da !important;
+    border-radius: 5px !important;
+    padding: 8px 10px;
   }
 
-  form label {
-    font-weight: 600;
-    color: #0f1c2e;
+  input:focus, select:focus {
+    border-color: #007bff !important;
+    box-shadow: none !important;
   }
 
-  input, select, textarea {
-    border-radius: 8px !important;
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
   }
 
-  /* Responsive for Mobile */
-  @media (max-width: 576px) {
-    .card-body {
-      padding: 1.2rem;
-    }
+  .btn-primary:hover {
+    background-color: #0069d9;
+  }
 
-    h4 {
-      font-size: 1.2rem;
-    }
-
-    button, .btn {
-      font-size: 0.9rem;
-      width: 100%;
-      margin-top: 0.6rem;
-    }
-
-    .d-flex {
-      flex-direction: column-reverse;
-      gap: 0.8rem;
-    }
+  .card-header {
+    border-bottom: 2px solid #dee2e6;
   }
 </style>
+
 {% endblock %}

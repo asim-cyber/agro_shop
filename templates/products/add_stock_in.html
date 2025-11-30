@@ -1,84 +1,142 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
-      <div class="card shadow border-0 rounded-4">
+{% load static %}
 
-        <!-- Header -->
-        <div class="card-header text-center" style="background-color:#0f1c2e; color:#00d084;">
-          <h4 class="mb-0 fw-semibold">📦 Add Stock In</h4>
-        </div>
+<div class="content-wrapper">
+  <section class="content">
+    <div class="container mt-4 mb-5 d-flex justify-content-center">
+      <div class="w-100" style="max-width: 900px;"> 
+        
+        <h3 class="text-center mb-5 fw-bold">Add Stock for {{ product.name }}</h3>
+        
+        <form method="post" enctype="multipart/form-data" autocomplete="off" class="p-4" id="stock-form-container">
+          {% csrf_token %}
 
-        <!-- Form Body -->
-        <div class="card-body p-4">
-          <form method="post" novalidate>
-            {% csrf_token %}
+          <div class="row g-4">
             
-            <!-- Form Fields -->
-            <div class="mb-3">
-              {{ form.as_p }}
-            </div>
+            <!-- Left Column -->
+            <div class="col-md-6">
+              
+              <div class="mb-3">
+                <label class="form-label fw-semibold required-label">Product Name</label>
+                <input type="text" class="form-control" value="{{ product.name }}" disabled style="background-color: #e9ecef;">
+              </div>
 
-            <!-- Buttons -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
-              <a href="{% url 'products:stock_in_list' product.id %}" class="btn btn-secondary">
-                ← Cancel
-              </a>
-              <button type="submit" class="btn" style="background-color:#198754; color:#fff;">
-                💾 Save
-              </button>
-            </div>
-          </form>
-        </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold required-label">Category</label>
+                <input type="text" class="form-control" value="{{ product.category }}" disabled style="background-color: #e9ecef;">
+              </div>
 
+              <div class="mb-3">
+                <label class="form-label fw-semibold required-label">Buying Price / Item*</label>
+                <input type="number" name="buying_price" class="form-control" placeholder="Enter Buying Price per Item" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Total Buying Amount</label>
+                <input type="text" class="form-control total-field" placeholder="Auto Calculated" disabled>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold required-label">Date Stock In*</label>
+                <input type="date" name="date_stock_in" class="form-control" required>
+              </div>
+
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-md-6">
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold required-label">Stock Quantity*</label>
+                <input type="number" name="quantity" class="form-control" placeholder="Enter Quantity" min="1" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold required-label">Selling Price / Item*</label>
+                <input type="number" name="selling_price" class="form-control" placeholder="Enter Selling Price per Item" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Total Selling Amount</label>
+                <input type="text" class="form-control total-field" placeholder="Auto Calculated" disabled>
+              </div>
+
+            </div>
+            
+          </div>
+          <div class="text-start mt-4">
+            <button type="submit" class="btn btn-primary px-4 shadow-sm" style="background-color: #4b88a8; border-color: #4b88a8;">
+              Save Stock
+            </button>
+            <a href="{% url 'products:stock_in_list' product.id %}" class="btn btn-outline-secondary px-4 ms-2 shadow-sm">
+              Cancel
+            </a>
+          </div>
+          
+        </form>
       </div>
     </div>
-  </div>
+  </section>
 </div>
 
-<!-- ✅ Custom Responsive Styling -->
 <style>
-  body {
-    background-color: #f8f9fa;
+  /* General Form Container Styling */
+  #stock-form-container {
+    background-color: white;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
   }
 
-  .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Input and Select Field Styling */
+  .form-control {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 0.65rem 0.75rem !important;
+  }
+  
+  /* Field Labels */
+  .form-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    color: #495057;
+  }
+  
+  /* Required Asterisk Coloring */
+  .required-label::after {
+    content: " *";
+    color: red;
+  }
+  
+  /* Disabled Fields (Total Amount Fields) */
+  .total-field {
+    background-color: #e9ecef;
+    opacity: 1;
   }
 
-  .card:hover {
-    transform: scale(1.02);
+  /* Button Styling */
+  .btn-primary {
+    background-color: #4b88a8;
+    border-color: #4b88a8;
+  }
+  .btn-primary:hover {
+    background-color: #3c7694;
   }
 
-  form label {
-    font-weight: 600;
-    color: #0f1c2e;
-  }
-
-  input, select, textarea {
-    border-radius: 8px !important;
-  }
-
-  /* Responsive for Mobile */
-  @media (max-width: 576px) {
-    .card-body {
-      padding: 1.2rem;
+  /* Responsive Spacing for Mobile */
+  @media (max-width: 768px) {
+    #stock-form-container {
+      padding: 15px;
+      margin: 10px;
     }
-
-    h4 {
-      font-size: 1.2rem;
+    .text-start {
+      text-align: center !important;
     }
-
-    button, .btn {
-      font-size: 0.9rem;
+    .btn {
       width: 100%;
-      margin-top: 0.6rem;
-    }
-
-    .d-flex {
-      flex-direction: column-reverse;
-      gap: 0.8rem;
+      margin-top: 10px;
     }
   }
 </style>

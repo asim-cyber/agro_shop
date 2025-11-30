@@ -1,6 +1,7 @@
 from django.contrib import admin
-from ledger.models import Ledger
-Ledger.objects.all()
+from .models import Ledger
 
-
-# Register your models here.
+@admin.register(Ledger)
+class LedgerAdmin(admin.ModelAdmin):
+    list_display = ('customer', 'date', 'entry_type', 'debit', 'credit', 'balance')
+    search_fields = ('customer__name',)

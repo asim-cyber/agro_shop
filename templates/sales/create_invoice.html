@@ -1,37 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-4">
-  <div class="row g-4">
-    <!-- Left: Product Selection -->
-    <div class="col-lg-7 col-md-12">
-      <h4 class="mb-3 text-center text-lg-start">🛒 Products</h4>
-
-      <div class="table-responsive">
-        <table class="table table-bordered align-middle text-center shadow-sm" id="productTable">
-          <thead class="table-dark">
-            <tr>
-              <th>Product</th>
-              <th>Stock</th>
-              <th>Price</th>
-              <th>Qty</th>
-              <th>Total</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="cartBody"></tbody>
-        </table>
+  <form method="POST" action="{% url 'sales:create_invoice' %}">
+    {% csrf_token %}
+    <div class="row g-4">
+      <!-- Left: Product Table -->
+      <div class="col-lg-7 col-md-12">
+        <h4 class="mb-3 text-center text-lg-start">🛒 Products</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle text-center shadow-sm" id="productTable">
+            <thead style="background-color: #f2f2f2;">
+              <tr>
+                <th>Product</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="cartBody"></tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-success w-100 mt-2" onclick="addItem()">➕ Add Item</button>
       </div>
 
-      <button type="button" class="btn btn-success w-100 mt-2" onclick="addItem()">➕ Add Item</button>
-    </div>
-
-    <!-- Right: Invoice Details -->
-    <div class="col-lg-5 col-md-12">
-      <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body">
-          <h4 class="mb-3 text-center text-lg-start">🧾 Invoice Details</h4>
-          <form method="POST">
-            {% csrf_token %}
+      <!-- Right: Invoice Form -->
+      <div class="col-lg-5 col-md-12">
+        <div class="card shadow-sm border-0 rounded-3">
+          <div class="card-body">
+            <h4 class="mb-3 text-center text-lg-start">🧾 Invoice Details</h4>
 
             <!-- Customer -->
             <div class="mb-3">
@@ -49,7 +47,8 @@
               <label class="form-label fw-semibold">Payment Method</label>
               <select name="payment_method" class="form-select" required>
                 <option value="cash">Cash</option>
-                <option value="bank">Bank</option>
+                <option value="credit">Credit</option>
+                <option value="installment">Installment</option>
               </select>
             </div>
 
@@ -65,98 +64,27 @@
               </div>
             </div>
 
-            <!-- Receiving -->
+            <!-- Receiving and Remaining -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Receiving Amount</label>
               <input type="number" name="receiving_amount" id="receivingAmount" class="form-control" oninput="calculateRemaining()">
             </div>
 
-            <!-- Remaining -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Remaining Amount</label>
               <input type="text" id="remainingAmount" class="form-control" readonly>
             </div>
 
+            <!-- Submit -->
             <button type="submit" class="btn btn-primary w-100 fw-semibold">💾 Create Invoice</button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 
-<!-- ✅ Custom Responsive Styling -->
-<style>
-  body {
-    background-color: #f9f9f9;
-  }
-
-  h4 {
-    font-weight: 600;
-    color: #0f1c2e;
-  }
-
-  .table {
-    font-size: 0.9rem;
-  }
-
-  .btn {
-    border-radius: 10px;
-  }
-
-  @media (min-width: 1200px) {
-    .container {
-      max-width: 1200px;
-    }
-  }
-
-  @media (max-width: 992px) {
-    .table th, .table td {
-      font-size: 0.85rem;
-      padding: 6px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    h4 {
-      text-align: center;
-    }
-    .table {
-      font-size: 0.8rem;
-    }
-    .btn {
-      font-size: 0.9rem;
-    }
-    .card {
-      margin-top: 1rem;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .table {
-      font-size: 0.75rem;
-    }
-    .form-label {
-      font-size: 0.85rem;
-    }
-    input, select {
-      font-size: 0.85rem;
-      padding: 0.35rem 0.5rem;
-    }
-    th, td {
-      white-space: nowrap;
-    }
-    #productTable {
-      overflow-x: auto;
-      display: block;
-    }
-    .btn {
-      padding: 0.5rem;
-    }
-  }
-</style>
-
-<!-- ✅ JavaScript Functions -->
+<!-- ✅ JavaScript Section -->
 <script>
 function addItem() {
   const row = `
@@ -165,7 +93,7 @@ function addItem() {
         <select name="product_id[]" class="form-select" required onchange="updateStock(this)">
           <option value="" disabled selected>-- Select Product --</option>
           {% for product in products %}
-          <option value="{{ product.id }}" data-stock="{{ product.stock }}" data-price="{{ product.price }}">
+          <option value="{{ product.id }}" data-stock="{{ product.available_quantity }}" data-price="{{ product.price }}">
             {{ product.name }}
           </option>
           {% endfor %}
@@ -176,15 +104,16 @@ function addItem() {
       <td><input type="number" name="quantity[]" class="form-control" value="1" min="1" oninput="updateTotals()"></td>
       <td class="itemTotal">0.00</td>
       <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
-    </tr>`;
+    </tr>
+  `;
   document.getElementById("cartBody").insertAdjacentHTML("beforeend", row);
   updateTotals();
 }
 
 function updateStock(select) {
-  const selectedOption = select.options[select.selectedIndex];
-  const stock = selectedOption.getAttribute("data-stock") || "-";
-  const price = selectedOption.getAttribute("data-price") || "0";
+  const option = select.options[select.selectedIndex];
+  const stock = option.getAttribute("data-stock");
+  const price = option.getAttribute("data-price");
   const row = select.closest("tr");
   row.querySelector(".stockCell").innerText = stock;
   row.querySelector("input[name='price[]']").value = price;

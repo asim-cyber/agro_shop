@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-5">
-  <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+  <div class="card border rounded-3 mx-auto" style="max-width: 500px; background-color: #ffffff;">
     <div class="card-body text-center p-4">
       <h2 class="text-danger fw-bold mb-3">⚠️ Delete Expense</h2>
-      <p class="fs-5 text-muted">
-        Are you sure you want to delete <strong class="text-dark">{{ expense.title }}</strong>?
+      <p class="text-muted fs-5 mb-4">
+        Are you sure you want to delete 
+        <strong class="text-dark">{{ expense.title }}</strong>?
       </p>
 
       <form method="post" class="d-flex flex-column flex-sm-row justify-content-center gap-3 mt-4">
@@ -13,7 +14,7 @@
         <button type="submit" class="btn btn-danger px-4 py-2 w-100 w-sm-auto">
           Yes, Delete
         </button>
-        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-secondary px-4 py-2 w-100 w-sm-auto">
+        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-outline-secondary px-4 py-2 w-100 w-sm-auto">
           Cancel
         </a>
       </form>
@@ -21,27 +22,43 @@
   </div>
 </div>
 
-<!-- Custom Styles -->
+<!-- ✅ Clean & Flat Styling -->
 <style>
   body {
-    background-color: #f8f9fa;
+    background-color: #eef1f5;
   }
 
   .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee2e6 !important;
+    box-shadow: none !important;
   }
 
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    font-weight: 600;
   }
 
   p {
+    color: #555;
     font-size: 1rem;
+  }
+
+  .btn-danger {
+    background-color: #dc3545 !important;
+    border: none !important;
+  }
+
+  .btn-danger:hover {
+    background-color: #bb2d3b !important;
+  }
+
+  .btn-outline-secondary {
+    border-color: #ccc !important;
+    color: #333 !important;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #e9ecef !important;
   }
 
   button, a.btn {
@@ -50,40 +67,26 @@
     transition: all 0.3s ease;
   }
 
-  button:hover, a.btn:hover {
-    opacity: 0.9;
-  }
-
-  @media (max-width: 768px) {
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 0.95rem;
-    }
-
-    .card-body {
-      padding: 1.5rem;
-    }
-  }
-
   @media (max-width: 576px) {
+    .card-body {
+      padding: 1.5rem !important;
+    }
+
     h2 {
-      font-size: 1.3rem;
+      font-size: 1.3rem !important;
     }
 
     .btn {
-      font-size: 0.9rem;
-      padding: 0.6rem;
+      font-size: 0.9rem !important;
+      padding: 0.6rem !important;
     }
 
     form {
-      flex-direction: column;
+      flex-direction: column !important;
     }
 
     form .btn {
-      width: 100%;
+      width: 100% !important;
     }
   }
 </style>

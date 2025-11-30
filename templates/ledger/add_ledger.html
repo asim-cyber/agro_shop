@@ -1,173 +1,156 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10 col-sm-12">
-      <div class="card shadow-lg border-0 rounded-4">
-        <!-- Header -->
-        <div class="card-header bg-primary text-white text-center rounded-top-4">
-          <h4 class="mb-0 fw-semibold">📘 Add Ledger Entry</h4>
+<div class="container py-5">
+  <div class="card border rounded-3 mx-auto" style="max-width: 700px; background-color: #ffffff;">
+    <div class="card-body p-4">
+      <h3 class="text-center fw-bold mb-4" style="color: #333;">📘 Add Ledger Entry</h3>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Customer and Date -->
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label for="customer" class="form-label fw-semibold">Select Customer</label>
+            <select name="customer" id="customer" class="form-select" required>
+              <option value="" disabled {% if not selected_customer %}selected{% endif %}>
+                -- Choose Customer --
+              </option>
+              {% for customer in customers %}
+                <option value="{{ customer.id }}"
+                  {% if selected_customer and selected_customer.id == customer.id %}selected{% endif %}>
+                  {{ customer.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="date" class="form-label fw-semibold">Date</label>
+            <input type="date" name="date" id="date" class="form-control" required>
+          </div>
         </div>
 
-        <!-- Body -->
-        <div class="card-body p-4">
-          <form method="post">
-            {% csrf_token %}
-
-            <!-- Customer and Date -->
-            <div class="row mb-3">
-              <div class="col-md-6 mb-3 mb-md-0">
-                <label for="customer" class="form-label fw-semibold">Select Customer</label>
-                <select name="customer" id="customer" class="form-select" required>
-                  <option value="" disabled {% if not selected_customer %}selected{% endif %}>
-                    -- Choose Customer --
-                  </option>
-                  {% for customer in customers %}
-                    <option value="{{ customer.id }}"
-                      {% if selected_customer and selected_customer.id == customer.id %}selected{% endif %}>
-                      {{ customer.name }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="date" class="form-label fw-semibold">Date</label>
-                <input type="date" name="date" id="date" class="form-control" required>
-              </div>
-            </div>
-
-            <!-- Debit and Credit -->
-            <div class="row mb-3">
-              <div class="col-md-6 mb-3 mb-md-0">
-                <label for="debit" class="form-label fw-semibold">Debit Amount</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  name="debit"
-                  id="debit"
-                  class="form-control"
-                  placeholder="Enter debit amount"
-                  required
-                >
-              </div>
-              <div class="col-md-6">
-                <label for="credit" class="form-label fw-semibold">Credit Amount (if any)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  name="credit"
-                  id="credit"
-                  class="form-control"
-                  placeholder="Enter credit amount"
-                >
-              </div>
-            </div>
-
-            <!-- Details -->
-            <div class="mb-3">
-              <label for="details" class="form-label fw-semibold">Details</label>
-              <textarea
-                name="details"
-                id="details"
-                rows="3"
-                class="form-control"
-                placeholder="Enter details here..."
-                required
-              ></textarea>
-            </div>
-
-            <!-- Buttons -->
-            <div class="text-end">
-              <button type="submit" class="btn btn-success px-4 me-2">💾 Save Entry</button>
-              <a href="{% url 'ledger:list_ledger' %}" class="btn btn-outline-secondary px-4">Cancel</a>
-            </div>
-          </form>
+        <!-- Debit and Credit -->
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label for="debit" class="form-label fw-semibold">Debit Amount</label>
+            <input
+              type="number"
+              step="0.01"
+              name="debit"
+              id="debit"
+              class="form-control"
+              placeholder="Enter debit amount"
+              required
+            >
+          </div>
+          <div class="col-md-6">
+            <label for="credit" class="form-label fw-semibold">Credit Amount (if any)</label>
+            <input
+              type="number"
+              step="0.01"
+              name="credit"
+              id="credit"
+              class="form-control"
+              placeholder="Enter credit amount"
+            >
+          </div>
         </div>
-      </div>
+
+        <!-- Details -->
+        <div class="mb-3">
+          <label for="details" class="form-label fw-semibold">Details</label>
+          <textarea
+            name="details"
+            id="details"
+            rows="3"
+            class="form-control"
+            placeholder="Enter details here..."
+            required
+          ></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary px-4 me-2">💾 Save Entry</button>
+          <a href="{% url 'ledger:list_ledger' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
-<!-- ✅ Responsive Styling -->
+<!-- ✅ Flat Clean Styling -->
 <style>
   body {
-    background-color: #f8f9fa;
+    background-color: #eef1f5;
   }
 
   .card {
-    transition: all 0.3s ease-in-out;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: none !important;
   }
 
-  .card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
   }
 
   .form-label {
     color: #333;
+    font-weight: 600;
   }
 
   .form-control,
-  .form-select {
-    border-radius: 10px;
-    border: 1px solid #ced4da;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  .form-select,
+  textarea {
+    border-radius: 6px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
   }
 
   .form-control:focus,
-  .form-select:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+  .form-select:focus,
+  textarea:focus {
+    border-color: #0d6efd !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2) !important;
   }
 
-  .btn-success {
-    border-radius: 10px;
+  .btn-primary {
+    background-color: #2f78c4 !important;
+    border: none !important;
+    border-radius: 8px;
     font-weight: 600;
-    transition: all 0.3s ease;
   }
 
-  .btn-success:hover {
-    background-color: #157347;
-    transform: scale(1.03);
+  .btn-primary:hover {
+    background-color: #2566a8 !important;
   }
 
   .btn-outline-secondary {
-    border-radius: 10px;
+    border-color: #ccc !important;
+    color: #333 !important;
+    border-radius: 8px;
     font-weight: 600;
-    transition: all 0.3s ease;
   }
 
   .btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: #fff;
+    background-color: #e9ecef !important;
   }
 
   @media (max-width: 768px) {
     .card-body {
-      padding: 1.5rem;
+      padding: 1.5rem !important;
     }
-    h4 {
-      font-size: 1.4rem;
-    }
+
     .btn {
       width: 100%;
       margin-top: 0.5rem;
     }
+
     .text-end {
       text-align: center !important;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .card {
-      border-radius: 10px;
-    }
-    .card-header {
-      font-size: 1.2rem;
-      padding: 0.8rem;
-    }
-    textarea {
-      font-size: 0.95rem;
     }
   }
 </style>

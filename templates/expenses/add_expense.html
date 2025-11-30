@@ -1,22 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container py-5">
-  <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+  <div class="card border rounded-3 mx-auto" style="max-width: 900px; background-color: #ffffff;">
     <div class="card-body p-4">
-      <h2 class="text-center text-primary fw-bold mb-4">💰 Add Expense</h2>
 
-      <form method="post" novalidate>
-        {% csrf_token %}
-        <div class="mb-3">
-          {{ form.as_p }}
-        </div>
+      <h3 class="text-center fw-bold mb-4" style="color: #333;">Expense List</h3>
 
-        <button type="submit" class="btn btn-primary w-100 py-2">Save Expense</button>
+      <!-- Search Form -->
+      <form method="get" action="" class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <input
+          type="date"
+          name="date"
+          class="form-control"
+          style="max-width: 250px;"
+          value="{{ request.GET.date }}"
+        />
+        <button type="submit" class="btn btn-primary px-4">Search</button>
       </form>
 
+      <!-- Expense Table -->
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead style="background-color: #f1f3f5; color: #333;">
+            <tr class="text-center">
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr class="text-center">
+              <td>{{ expense.amount }}</td>
+              <td>{{ expense.description }}</td>
+              <td>{{ expense.date|date:"M. d, Y" }}</td>
+              <td>
+                <a href="{% url 'expenses:update_expense' expense.id %}" class="btn btn-sm btn-primary">Update</a>
+                <a href="{% url 'expenses:delete_expense' expense.id %}" class="btn btn-sm btn-danger">Delete</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-4">No expenses found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
       <div class="text-center mt-3">
-        <a href="{% url 'expenses:list_expenses' %}" class="btn btn-outline-secondary w-100">
-          🔙 Back to Expense List
+        <a href="{% url 'expenses:add_expense' %}" class="btn btn-outline-secondary w-100">
+          ➕ Add New Expense
         </a>
       </div>
     </div>
@@ -26,55 +61,44 @@
 <!-- Custom Styles -->
 <style>
   body {
-    background-color: #f8f9fa;
+    background-color: #eef1f5;
   }
 
   .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: none !important;
+    border: 1px solid #dee2e6 !important;
   }
 
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  table th,
+  table td {
+    vertical-align: middle !important;
   }
 
-  h2 {
-    font-size: 1.8rem;
+  .btn-primary {
+    background-color: #2f78c4 !important;
+    border: none !important;
   }
 
-  form label {
-    font-weight: 600;
-    color: #333;
+  .btn-primary:hover {
+    background-color: #2566a8 !important;
   }
 
-  input, select, textarea {
-    border-radius: 8px !important;
+  .btn-outline-secondary {
+    border-color: #ccc !important;
+    color: #333 !important;
   }
 
-  button {
-    transition: 0.3s ease;
-  }
-
-  button:hover {
-    opacity: 0.9;
+  .btn-outline-secondary:hover {
+    background-color: #e9ecef !important;
   }
 
   @media (max-width: 768px) {
-    h2 {
-      font-size: 1.5rem;
+    form {
+      flex-direction: column !important;
+      align-items: stretch !important;
     }
-    .card {
-      padding: 1.5rem;
-    }
-  }
-
-  @media (max-width: 576px) {
-    h2 {
-      font-size: 1.3rem;
-    }
-    .btn {
-      font-size: 0.9rem;
-      padding: 0.6rem;
+    input[type="date"] {
+      width: 100% !important;
     }
   }
 </style>

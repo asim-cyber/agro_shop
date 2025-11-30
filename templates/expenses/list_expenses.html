@@ -1,140 +1,105 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container py-4">
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-    <h2 class="fw-bold text-primary mb-3 mb-md-0">💰 Expenses List</h2>
-    <a href="{% url 'expenses:add_expense' %}" class="btn btn-success">
-      + Add Expense
-    </a>
-  </div>
+<div class="container py-5">
+  <div class="card border rounded-3 mx-auto" style="max-width: 900px; background-color: #ffffff;">
+    <div class="card-body p-4">
 
-  <div class="table-responsive shadow-sm rounded-3">
-    <table class="table table-bordered table-hover align-middle text-center mb-0">
-      <thead class="table-dark">
-        <tr>
-          <th>Title</th>
-          <th>Amount</th>
-          <th>Description</th>
-          <th>Date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for expense in expenses %}
-        <tr>
-          <td>{{ expense.title }}</td>
-          <td>Rs. {{ expense.amount }}</td>
-          <td>{{ expense.description|default:"—" }}</td>
-          <td>{{ expense.date }}</td>
-          <td>
-            <div class="d-flex flex-wrap justify-content-center gap-2">
-              <a href="{% url 'expenses:update_expense' expense.id %}" class="btn btn-warning btn-sm">
-                ✏️ Update
-              </a>
-              <a href="{% url 'expenses:delete_expense' expense.id %}" class="btn btn-danger btn-sm">
-                🗑️ Delete
-              </a>
-            </div>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="5" class="text-muted py-4">No expenses found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <h3 class="text-center fw-bold mb-4" style="color: #333;">Expense List</h3>
+
+      <!-- Search Form -->
+      <form method="get" action="" class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <input
+          type="date"
+          name="date"
+          class="form-control"
+          style="max-width: 250px;"
+          value="{{ request.GET.date }}"
+        />
+        <button type="submit" class="btn btn-primary px-4">Search</button>
+      </form>
+
+      <!-- Expense Table -->
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead style="background-color: #f1f3f5; color: #333;">
+            <tr class="text-center">
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr class="text-center">
+              <td>{{ expense.amount }}</td>
+              <td>{{ expense.description }}</td>
+              <td>{{ expense.date|date:"M. d, Y" }}</td>
+              <td>
+                <a href="{% url 'expenses:update_expense' expense.id %}" class="btn btn-sm btn-primary">Update</a>
+                <a href="{% url 'expenses:delete_expense' expense.id %}" class="btn btn-sm btn-danger">Delete</a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted py-4">No expenses found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-center mt-3">
+        <a href="{% url 'expenses:add_expense' %}" class="btn btn-outline-secondary w-100">
+          ➕ Add New Expense
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ✅ Custom Responsive Styles -->
+<!-- Custom Styles -->
 <style>
   body {
-    background-color: #f8f9fa;
+    background-color: #eef1f5;
   }
 
-  h2 {
-    font-size: 1.8rem;
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #dee2e6 !important;
   }
 
-  .table {
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
+  table th,
+  table td {
+    vertical-align: middle !important;
   }
 
-  .table th, .table td {
-    vertical-align: middle;
+  .btn-primary {
+    background-color: #2f78c4 !important;
+    border: none !important;
   }
 
-  .btn {
-    border-radius: 8px;
-    font-weight: 500;
-    transition: all 0.3s ease;
+  .btn-primary:hover {
+    background-color: #2566a8 !important;
   }
 
-  .btn:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
+  .btn-outline-secondary {
+    border-color: #ccc !important;
+    color: #333 !important;
   }
 
-  /* 📱 Responsive Design */
-  @media (max-width: 992px) {
-    h2 {
-      font-size: 1.6rem;
-    }
+  .btn-outline-secondary:hover {
+    background-color: #e9ecef !important;
   }
 
   @media (max-width: 768px) {
-    .table thead {
-      display: none;
+    form {
+      flex-direction: column !important;
+      align-items: stretch !important;
     }
-
-    .table tr {
-      display: block;
-      margin-bottom: 1rem;
-      border: 1px solid #dee2e6;
-      border-radius: 10px;
-      background: #fff;
-      padding: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .table td {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0;
-      border: none;
-    }
-
-    .table td::before {
-      content: attr(data-label);
-      font-weight: 600;
-      color: #0d6efd;
-    }
-
-    .table td:last-child {
-      justify-content: center;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .btn {
-      font-size: 0.85rem;
-      padding: 0.4rem 0.8rem;
+    input[type="date"] {
+      width: 100% !important;
     }
   }
 </style>
-
-<!-- ✅ Add JS to make data-labels work automatically -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const headers = Array.from(document.querySelectorAll("table thead th")).map(th => th.innerText.trim());
-    document.querySelectorAll("table tbody tr").forEach(row => {
-      row.querySelectorAll("td").forEach((cell, i) => {
-        cell.setAttribute("data-label", headers[i]);
-      });
-    });
-  });
-</script>
 {% endblock %}

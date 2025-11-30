@@ -13,7 +13,11 @@ def add_expense(request):
     return render(request, "expenses/add_expense.html", {"form": form})
 
 def list_expenses(request):
-    expenses = Expense.objects.all()
+    date_filter = request.GET.get('date')
+    if date_filter:
+        expenses = Expense.objects.filter(date=date_filter)
+    else:
+        expenses = Expense.objects.all()
     return render(request, "expenses/list_expenses.html", {"expenses": expenses})
 
 

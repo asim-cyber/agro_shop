@@ -1,89 +1,153 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-5">
-  
-  <!-- ✅ Page Title -->
-  <div class="text-center mb-4">
-    <h3 class="fw-bold text-dark-navy">🛠️ Update Product</h3>
-    <p class="text-muted mb-0">Edit the product details and save your changes below.</p>
-  </div>
+{% load static %}
 
-  <!-- ✅ Responsive Card Form -->
-  <div class="card shadow-sm border-0 rounded-4">
-    <div class="card-header text-white" style="background-color: #0f1c2e;">
-      <h5 class="mb-0">Product Information</h5>
-    </div>
-
-    <div class="card-body p-4">
-      <form method="post" enctype="multipart/form-data">
+<div class="content-wrapper d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+  <section class="content w-100" style="max-width: 600px;">
+    <div class="card shadow-sm border-0 rounded-3 p-4" style="background-color: #fff;">
+      
+      <h3 class="text-center mb-4 fw-bold text-dark">Update Product</h3>
+      
+      <form method="post" enctype="multipart/form-data" autocomplete="off">
         {% csrf_token %}
 
-        <div class="row g-3">
-          <!-- Automatically render all fields -->
-          <div class="col-12">
-            {{ form.as_p }}
+        <!-- Product Name -->
+        <div class="mb-3">
+          <label for="id_name" class="form-label fw-bold">Product Name <span class="text-danger">*</span></label>
+          {{ form.name }}
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3">
+          <label for="id_category" class="form-label fw-bold">Category <span class="text-danger">*</span></label>
+          {{ form.category }}
+        </div>
+
+        <!-- Price -->
+        <div class="mb-3">
+          <label for="id_price" class="form-label fw-bold">Price <span class="text-danger">*</span></label>
+          {{ form.price }}
+        </div>
+
+        <!-- Total Quantity -->
+        <div class="mb-3">
+          <label for="id_total_quantity" class="form-label fw-bold">Total Quantity <span class="text-danger">*</span></label>
+          {{ form.total_quantity }}
+        </div>
+
+        <!-- Available Quantity -->
+        <div class="mb-3">
+          <label for="id_available_quantity" class="form-label fw-bold">Available Quantity <span class="text-danger">*</span></label>
+          {{ form.available_quantity }}
+        </div>
+
+        <!-- Date -->
+        <div class="mb-4">
+          <label for="id_date" class="form-label fw-bold">Date <span class="text-danger">*</span></label>
+          <div class="input-group position-relative">
+            {{ form.date }}
+            <span class="input-group-text bg-white" 
+                  style="border-left:none; position:absolute; right:8px; top:6px; bottom:6px; z-index:2;">
+              <i class="fa fa-calendar text-muted"></i>
+            </span>
           </div>
         </div>
 
-        <!-- ✅ Buttons -->
-        <div class="text-end mt-4">
-          <button type="submit" class="btn px-4" style="background-color:#198754; color:#fff;">
-            💾 Save Changes
+        <!-- Product Image -->
+        <div class="mb-4">
+          <label for="id_image" class="form-label fw-bold">Product Image <span class="text-danger">*</span></label>
+          {{ form.image }}
+        </div>
+
+        <!-- Save Button -->
+        <div class="text-end">
+          <button type="submit" class="btn btn-info px-4 fw-semibold shadow-sm">
+            💾 Save
           </button>
-          <a href="{% url 'products:list_products' %}" class="btn btn-secondary px-4">
-            ✖ Cancel
-          </a>
         </div>
       </form>
     </div>
-  </div>
+  </section>
 </div>
 
-<!-- ✅ Custom Responsive Styles -->
 <style>
+  /* 🌿 Background setup for centered look */
   body {
-    background-color: #f8f9fa;
+    background-color: #f0f2f5;
+  }
+  .content-wrapper {
+    background-color: transparent;
+    padding: 20px;
   }
 
-  .text-dark-navy {
+  /* 🧱 Input styling */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select, textarea {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.35rem !important;
+    padding: 0.5rem 0.75rem !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input[type="file"] {
+    border: 1px solid #ced4da !important;
+    border-radius: 0.35rem !important;
+    padding: 6px;
+    width: 100%;
+  }
+
+  /* 🗓️ Date Icon Alignment */
+  .input-group {
+    position: relative;
+  }
+  .input-group-text {
+    pointer-events: none;
+    background-color: #fff !important;
+    border: none !important;
+  }
+  #id_date {
+    padding-right: 2.5rem !important;
+  }
+
+  /* 💾 Save Button */
+  .btn-info {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    border-radius: 0.35rem;
+    transition: 0.2s ease-in-out;
+  }
+  .btn-info:hover {
+    background-color: #138496;
+  }
+
+  /* 🏷️ Labels */
+  .form-label {
+    font-weight: 600;
     color: #0f1c2e;
   }
 
+  /* ✨ Card look & spacing */
   .card {
-    transition: all 0.3s ease;
-  }
-
-  .card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
-
-  form label {
-    font-weight: 500;
-    color: #0f1c2e;
-  }
-
-  .form-control, .form-select, textarea {
     border-radius: 10px;
-    border: 1px solid #ccc;
   }
 
-  .btn {
-    border-radius: 10px;
-    font-weight: 500;
+  /* 📱 Responsive tweak (fits all screens without scroll) */
+  @media (max-height: 700px) {
+    .content-wrapper {
+      align-items: flex-start !important;
+      padding-top: 30px;
+    }
   }
 
-  /* 📱 Mobile Optimization */
   @media (max-width: 768px) {
-    h3 {
-      font-size: 1.4rem;
+    .card {
+      padding: 1.5rem !important;
     }
-
-    .btn {
+    .btn-info {
       width: 100%;
-      margin-bottom: 10px;
     }
-
     .text-end {
       text-align: center !important;
     }
